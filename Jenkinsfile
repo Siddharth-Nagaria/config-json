@@ -120,7 +120,24 @@ pipeline {
                             "Description" : "Default response for POST /api/v1/validate",
                             "Type" : "Internal"  
                         }
-                    ]
+                    ],
+                      "components" : {
+                        "securitySchemes" : {
+                        "openapi_config" : {
+                            "type" : "apiKey",
+                            "name" : "Authorization",
+                            "in" : "header",
+                            "x-amazon-apigateway-authorizer" : {
+                            "identitySource" : "$request.header.Authorization",
+                            "authorizerUri" : "arn:aws:apigateway:ap-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-south-1:581962035245:function:validate_dynamic_bearer_token/invocations",
+                            "authorizerPayloadFormatVersion" : "2.0",
+                            "authorizerResultTtlInSeconds" : 0,
+                            "type" : "request",
+                            "enableSimpleResponses" : false
+                            }
+                        }
+                        }
+                    }
                 }'''
 
                 writeFile file: 'api-gateway-config.json', text: jsonData
